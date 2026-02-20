@@ -1,31 +1,31 @@
 import { NavLink } from "react-router-dom";
-import { BarChart3, Upload, Users, TrendingUp, Settings, LogOut } from "lucide-react";
+import { BarChart3, Upload, Users, TrendingUp, Settings, LogOut, Cpu } from "lucide-react";
 
 export default function Sidebar() {
   return (
-    <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
+    <aside className="w-64 bg-[#030712] border-r border-white/10 flex flex-col">
       {/* Logo */}
-      <div className="p-6 border-b border-gray-200">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-            AI
+      <div className="p-8 border-b border-white/10">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-indigo-500/20">
+            <Cpu size={24} />
           </div>
-          <span className="font-semibold text-gray-900">ResumeAI</span>
+          <span className="font-bold text-xl premium-gradient-text tracking-tight">NeuroScreen</span>
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-1">
+      <nav className="flex-1 px-4 py-8 space-y-2">
         <NavItem to="/" icon={<BarChart3 size={20} />} label="Dashboard" />
-        <NavItem to="/upload-resume" icon={<Upload size={20} />} label="Upload Resumes" />
-        <NavItem to="/candidates" icon={<Users size={20} />} label="Candidates" />
-        <NavItem to="/analytics" icon={<TrendingUp size={20} />} label="Analytics" />
+        <NavItem to="/upload-resume" icon={<Upload size={20} />} label="Neural Screening" />
+        <NavItem to="/candidates" icon={<Users size={20} />} label="Elite Candidates" />
+        <NavItem to="/analytics" icon={<TrendingUp size={20} />} label="Market Trends" />
       </nav>
 
       {/* Bottom */}
-      <div className="p-4 border-t border-gray-200 space-y-1">
-        <NavItem to="/settings" icon={<Settings size={20} />} label="Settings" />
-        <NavItem to="/logout" icon={<LogOut size={20} />} label="Logout" />
+      <div className="px-4 py-8 border-t border-white/5 space-y-2">
+        <NavItem to="/settings" icon={<Settings size={20} />} label="System Config" />
+        <NavItem to="/logout" icon={<LogOut size={20} />} label="Disconnect" />
       </div>
     </aside>
   );
@@ -36,14 +36,14 @@ function NavItem({ to, icon, label }) {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer
+        `flex items-center gap-4 px-5 py-3.5 rounded-xl cursor-pointer transition-all duration-300
         ${isActive
-          ? "bg-indigo-50 text-indigo-600 font-medium"
-          : "text-gray-600 hover:bg-gray-50"}`
+          ? "bg-white/5 text-indigo-400 font-bold border border-white/10 shadow-[0_0_20px_rgba(99,102,241,0.1)]"
+          : "text-gray-500 hover:text-gray-300 hover:bg-white/[0.02]"}`
       }
     >
-      {icon}
-      <span>{label}</span>
+      <span className={({ isActive }) => (isActive ? "text-indigo-400" : "text-gray-600 group-hover:text-gray-400")}>{icon}</span>
+      <span className="text-sm tracking-wide">{label}</span>
     </NavLink>
   );
 }
