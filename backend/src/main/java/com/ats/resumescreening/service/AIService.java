@@ -46,7 +46,7 @@ public class AIService {
 
     public String analyzeResume(String resumeText, String jobDescription) {
         String provider = getSetting("ai.provider", defaultAiProvider);
-        
+
         if ("cohere".equalsIgnoreCase(provider)) {
             return analyzeWithCohere(resumeText, jobDescription);
         } else if ("huggingface".equalsIgnoreCase(provider)) {
@@ -72,7 +72,7 @@ public class AIService {
     }
 
     private String analyzeWithGemini(String resumeText, String jobDescription) {
-        String apiKey = getSetting($"gemini.key", defaultGeminiApiKey);
+        String apiKey = getSetting("gemini.key", defaultGeminiApiKey);
         String apiUrl = getSetting("gemini.url", defaultGeminiApiUrl);
         String prompt = getPrompt(resumeText, jobDescription);
 
@@ -98,7 +98,7 @@ public class AIService {
     }
 
     private String analyzeWithCohere(String resumeText, String jobDescription) {
-        String apiKey = getSetting($"cohere.key", defaultCohereApiKey);
+        String apiKey = getSetting("cohere.key", defaultCohereApiKey);
         String apiUrl = getSetting("cohere.url", defaultCohereApiUrl);
         String prompt = getPrompt(resumeText, jobDescription);
 
@@ -110,14 +110,14 @@ public class AIService {
             Map<String, Object> requestBody = new HashMap<>();
             requestBody.put("message", prompt);
             requestBody.put("model", "command-r-08-2024");
-            
+
             Map<String, String> responseFormat = new HashMap<>();
             responseFormat.put("type", "json_object");
             requestBody.put("response_format", responseFormat);
 
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
             String response = restTemplate.postForObject(apiUrl, entity, String.class);
-            
+
             JsonNode root = objectMapper.readTree(response);
             return root.path("text").asText().trim();
         } catch (Exception e) {
@@ -126,7 +126,7 @@ public class AIService {
     }
 
     private String analyzeWithHuggingFace(String resumeText, String jobDescription) {
-        String apiKey = getSetting("huggingface.key",${COHERE_API_KEY}); // User provided key as fallback
+        String apiKey = getSetting("huggingface.key", System.getenv("COHERE_API_KEY")); // fallback
         String model = getSetting("huggingface.model", "meta-llama/Llama-3.2-3B-Instruct");
         String apiUrl = "https://router.huggingface.co/v1/chat/completions";
         String prompt = getPrompt(resumeText, jobDescription);
@@ -138,7 +138,7 @@ public class AIService {
 
             Map<String, Object> requestBody = new HashMap<>();
             requestBody.put("model", model);
-            
+
             Map<String, String> message = new HashMap<>();
             message.put("role", "user");
             message.put("content", prompt);
@@ -147,10 +147,10 @@ public class AIService {
 
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
             String response = restTemplate.postForObject(apiUrl, entity, String.class);
-            
+
             JsonNode root = objectMapper.readTree(response);
             String text = root.path("choices").get(0).path("message").path("content").asText().trim();
-            
+
             return cleanJson(text);
         } catch (Exception e) {
             return generateErrorJson(e.getMessage());
