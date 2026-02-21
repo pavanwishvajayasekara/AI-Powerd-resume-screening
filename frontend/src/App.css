@@ -1,0 +1,6 @@
+/* Clean slate for App-specific styles if needed, currently using global index.css */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
