@@ -36,9 +36,14 @@ public class ResumeController {
         try {
             String resumeText = parserService.parseResume(file);
             String aiResponseJson = aiService.analyzeResume(resumeText, jobDescription);
-            
+
             JsonNode root = objectMapper.readTree(aiResponseJson);
             
+            // Optional: check AI service error
+            if (root.has("error")) {
+                return ResponseEntity.badRequest().body("AI Service Error: " + root.path("error").asText());
+            }
+
             Candidate candidate = new Candidate();
             candidate.setName(file.getOriginalFilename()); // Fallback name
             candidate.setResumeText(resumeText);
@@ -54,7 +59,7 @@ public class ResumeController {
             
             return ResponseEntity.ok(candidate);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("System Error: " + e.getMessage());
         }
     }
 
