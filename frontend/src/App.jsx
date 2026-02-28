@@ -1,21 +1,18 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
-import UploadResume from "./pages/UploadResume";
-import Candidates from "./pages/Candidates";
-import Analytics from "./pages/Analytics";
-import Settings from "./pages/Settings";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AdminLayout from "./layouts/AdminLayout";
+import AuthPage    from "./pages/Authpage";
+import Client      from "./pages/client";
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/upload-resume" element={<UploadResume />} />
-        <Route path="/candidates" element={<Candidates />} />
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route path="/"        element={<AuthPage />} />
+        <Route path="/login"   element={<AuthPage />} />
+        <Route path="/admin/*" element={<AdminLayout />} />
+        <Route path="/client"  element={<Client />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
