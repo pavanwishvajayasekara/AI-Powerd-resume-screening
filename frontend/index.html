@@ -7,6 +7,14 @@
     <title>frontend</title>
   </head>
   <body>
+    <script>
+      // Load user theme preference, ignoring OS preference
+      if (localStorage.theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
