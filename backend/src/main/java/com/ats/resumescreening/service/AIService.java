@@ -126,7 +126,7 @@ public class AIService {
     }
 
     private String analyzeWithHuggingFace(String resumeText, String jobDescription) {
-        String apiKey = getSetting("huggingface.key", System.getenv("COHERE_API_KEY")); // fallback
+        String apiKey = getSetting("huggingface.key", System.getenv("vgCSfms3J3Qe60rsEDJIyOJ4TQKmKJ2Viq7t7mXR")); // fallback
         String model = getSetting("huggingface.model", "meta-llama/Llama-3.2-3B-Instruct");
         String apiUrl = "https://router.huggingface.co/v1/chat/completions";
         String prompt = getPrompt(resumeText, jobDescription);

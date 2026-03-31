@@ -1,7 +1,14 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { BarChart3, Upload, Users, TrendingUp, Settings, LogOut, Cpu } from "lucide-react";
 
 export default function Sidebar() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("resumatch_user");
+    navigate("/");
+  };
+
   return (
     <aside className="w-64 bg-[#030712] border-r border-white/10 flex flex-col">
       {/* Logo */}
@@ -16,34 +23,46 @@ export default function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 px-4 py-8 space-y-2">
-        <NavItem to="/" icon={<BarChart3 size={20} />} label="Dashboard" />
-        <NavItem to="/upload-resume" icon={<Upload size={20} />} label="Neural Screening" />
-        <NavItem to="/candidates" icon={<Users size={20} />} label="Elite Candidates" />
-        <NavItem to="/analytics" icon={<TrendingUp size={20} />} label="Market Trends" />
+        <NavItem to="/admin"               end   icon={<BarChart3  size={20} />} label="Dashboard"        />
+        <NavItem to="/admin/upload-resume"       icon={<Upload     size={20} />} label="Neural Screening" />
+        <NavItem to="/admin/candidates"          icon={<Users      size={20} />} label="Elite Candidates" />
+        <NavItem to="/admin/analytics"           icon={<TrendingUp size={20} />} label="Market Trends"    />
       </nav>
 
       {/* Bottom */}
       <div className="px-4 py-8 border-t border-white/5 space-y-2">
-        <NavItem to="/settings" icon={<Settings size={20} />} label="System Config" />
-        <NavItem to="/logout" icon={<LogOut size={20} />} label="Disconnect" />
+        <NavItem to="/admin/settings" icon={<Settings size={20} />} label="System Config" />
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-4 px-5 py-3.5 rounded-xl cursor-pointer transition-all duration-300 text-gray-500 hover:text-red-400 hover:bg-red-500/5"
+        >
+          <LogOut size={20} />
+          <span className="text-sm tracking-wide">Disconnect</span>
+        </button>
       </div>
     </aside>
   );
 }
 
-function NavItem({ to, icon, label }) {
+function NavItem({ to, icon, label, end = false }) {
   return (
     <NavLink
       to={to}
+      end={end}
       className={({ isActive }) =>
-        `flex items-center gap-4 px-5 py-3.5 rounded-xl cursor-pointer transition-all duration-300
-        ${isActive
-          ? "bg-white/5 text-indigo-400 font-bold border border-white/10 shadow-[0_0_20px_rgba(99,102,241,0.1)]"
-          : "text-gray-500 hover:text-gray-300 hover:bg-white/[0.02]"}`
+        `flex items-center gap-4 px-5 py-3.5 rounded-xl cursor-pointer transition-all duration-300 ${
+          isActive
+            ? "bg-white/5 text-indigo-400 font-bold border border-white/10 shadow-[0_0_20px_rgba(99,102,241,0.1)]"
+            : "text-gray-500 hover:text-gray-300 hover:bg-white/[0.02]"
+        }`
       }
     >
-      <span className={({ isActive }) => (isActive ? "text-indigo-400" : "text-gray-600 group-hover:text-gray-400")}>{icon}</span>
-      <span className="text-sm tracking-wide">{label}</span>
+      {({ isActive }) => (
+        <>
+          <span className={isActive ? "text-indigo-400" : "text-gray-600"}>{icon}</span>
+          <span className="text-sm tracking-wide">{label}</span>
+        </>
+      )}
     </NavLink>
   );
 }
